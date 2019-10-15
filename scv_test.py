@@ -6,14 +6,25 @@ cap = cv2.VideoCapture(0)
 
 ret, frame = cap.read()
 
+def seq_generate(dif):
+	vect = np.linalg.norm(dif, axis = (1,2))
+        return vect
+
+vector = np.array([])
 while(True):
-	frame1 = frame
-	ret, frame = cap.read()
-	dif = frame - frame1
-    	cv2.imshow('frame', dif)
-	vector = np.linalg.norm(dif, axis = (1,2))
-	transform = np.abs(np.fft.fft(vector))
-	plt.plot(transform[1:])
+	for i in range(2):
+		vector = np.array([])
+		frame1 = frame
+		ret, frame = cap.read()
+		dif = frame - frame1
+		dif = dif ** 3 #- dif ** 2 + dif
+		cv2.imshow("noize", dif)
+		vector = np.concatenate((vector, seq_generate(dif)))
+
+	hist, bins = np.histogram(vector, bins=20)
+	width = 0.7 * (bins[1] - bins[0])
+	center = (bins[:-1] + bins[1:]) / 2
+	plt.bar(center, hist, align='center', width=width)
 	plt.savefig('gr.png')
 	gr = cv2.imread('gr.png')
 	cv2.imshow('graph', gr)
@@ -24,5 +35,4 @@ while(True):
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
-
 
