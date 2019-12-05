@@ -4,6 +4,7 @@ class img_pipeline :
 	plen = 3
 	cap = None
 	pdata = None
+	_product = None
 	
 	def __init__(self, _plen = None, _cap = cv.VideoCapture(0)):
 		if _plen:
@@ -16,9 +17,13 @@ class img_pipeline :
 		if not img: 
 			ret, img = self.cap.read()
 		self.pdata = [img] + self.pdata[:-1]
+		self._product = None
 		
 	def product(self):
-		return sum(self.pdata[0] - frame for frame in self.pdata[-1:]) ** 3
+		if not self._product:
+			dif = sum(self.pdata[0] - frame for frame in self.pdata[-1:])
+			self._product = dif ** 3
+		return self._product
 		
 	def shutdown(self):
 		self.cap.release()
