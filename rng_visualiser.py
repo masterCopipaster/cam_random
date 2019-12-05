@@ -1,27 +1,14 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+import img_pipeline
+import img_rng
 
-cap = cv2.VideoCapture(0)
+pl= img_pipeline.img_pipeline(5)
 
-ret, frame = cap.read()
-ret, frame1 = cap.read()
-
-def seq_generate(dif):
-	vect = np.linalg.norm(dif, axis = (1,2))
-	return vect
-
-vector = np.array([])
 while(True):
-	vector = np.array([])
-	for i in range(2):
-		frame2 = frame1
-		frame1 = frame
-		ret, frame = cap.read()
-		dif = frame - frame1 + frame - frame2
-		dif = dif ** 3
-		cv2.imshow("noize", dif)
-		vector = np.concatenate((vector, seq_generate(dif)))
+	vector = img_rng.line_norm_seq(pl.product())
+	pl.step()
 
 	hist, bins = np.histogram(vector, bins=20)
 	width = 0.7 * (bins[1] - bins[0])
@@ -35,6 +22,6 @@ while(True):
 		break
 
 # When everything done, release the capture
-cap.release()
+pl.shutdown()
 cv2.destroyAllWindows()
 
