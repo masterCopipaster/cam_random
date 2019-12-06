@@ -10,10 +10,10 @@ vector = np.array([])
 while(True):
 	img = pl.product()
 	cv2.imshow('noize', img)
-	vector = np.concatenate((vector, img_rng.line_norm_seq(img)))
+	vector = np.concatenate((vector, img_rng.u32_seq(img)))
 	pl.step()
 
-	hist, bins = np.histogram(vector, bins=20)
+	hist, bins = np.histogram(vector, bins=50)
 	width = 0.7 * (bins[1] - bins[0])
 	center = (bins[:-1] + bins[1:]) / 2
 	plt.bar(center, hist, align='center', width=width)

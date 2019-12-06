@@ -10,7 +10,7 @@ vector = np.array([])
 while(True):
 	img = pl.product()
 	cv2.imshow('noize', img)
-	vector = np.concatenate((vector, img_rng.line_norm_seq(img)))
+	vector = np.concatenate((vector, img_rng.u32_seq(img)))
 	pl.step()
 
 	if cv2.waitKey(1) & 0xFF == ord('q'):
